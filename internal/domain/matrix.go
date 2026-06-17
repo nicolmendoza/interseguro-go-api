@@ -1,4 +1,4 @@
-package main
+package domain
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ type Matrix [][]float64
 
 const epsilon = 1e-10
 
-func (matrix Matrix) Validate() error {
+func (matrix Matrix) ValidateForQR() error {
 	if err := matrix.ValidateRectangular(); err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (matrix Matrix) ValidateRectangular() error {
 }
 
 func QRFactorization(a Matrix) (Matrix, Matrix, error) {
-	if err := a.Validate(); err != nil {
+	if err := a.ValidateForQR(); err != nil {
 		return nil, nil, err
 	}
 
