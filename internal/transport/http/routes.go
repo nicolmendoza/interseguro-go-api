@@ -11,6 +11,8 @@ import (
 func registerRoutes(app *fiber.App, config Config, matrixService matrixapp.Service) {
 
 	app.Get("/health", handlers.Health)
+	app.Get("/openapi.json", handlers.OpenAPI)
+	app.Get("/docs", handlers.Swagger)
 	app.Post("/auth/token", handlers.Token(config.JWTSecret))
 
 	protected := app.Group("/", middleware.JWT(config.JWTSecret))

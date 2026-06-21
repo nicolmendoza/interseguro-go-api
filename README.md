@@ -16,6 +16,8 @@ Servicio desplegado en Google Cloud Run:
 
 ```txt
 Go API:   https://interseguro-go-api-745150536858.europe-west1.run.app
+Swagger:  https://interseguro-go-api-745150536858.europe-west1.run.app/docs
+OpenAPI:  https://interseguro-go-api-745150536858.europe-west1.run.app/openapi.json
 ```
 
 ## Despliegue en Google Cloud
@@ -73,6 +75,12 @@ La API queda en:
 
 ```txt
 http://localhost:3000
+```
+
+Swagger:
+
+```txt
+http://localhost:3000/docs
 ```
 
 ## Tests
@@ -136,6 +144,8 @@ Responsabilidades:
 
 ```txt
 GET  /health
+GET  /openapi.json
+GET  /docs
 POST /auth/token
 POST /qr
 POST /rotate

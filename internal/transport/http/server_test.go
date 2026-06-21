@@ -32,6 +32,36 @@ func TestQRRequiresJWT(t *testing.T) {
 	}
 }
 
+func TestOpenAPIIsPublic(t *testing.T) {
+
+	app := newTestServer()
+	req := newTestRequest(t, http.MethodGet, "/openapi.json", "")
+	resp, err := app.Test(req)
+
+	if err != nil {
+		t.Fatalf("la solicitud fallo: %v", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("se esperaba estado 200, se obtuvo %d", resp.StatusCode)
+	}
+}
+
+func TestSwaggerIsPublic(t *testing.T) {
+
+	app := newTestServer()
+	req := newTestRequest(t, http.MethodGet, "/docs", "")
+	resp, err := app.Test(req)
+
+	if err != nil {
+		t.Fatalf("la solicitud fallo: %v", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("se esperaba estado 200, se obtuvo %d", resp.StatusCode)
+	}
+}
+
 func TestQRWithJWT(t *testing.T) {
 
 	app := newTestServer()
