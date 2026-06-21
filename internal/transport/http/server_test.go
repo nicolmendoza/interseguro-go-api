@@ -85,7 +85,12 @@ func newTestServer() interface {
 } {
 
 	matrixService := matrixapp.NewService(fakeStatsClient{})
-	return NewServer(Config{JWTSecret: "test-secret"}, matrixService)
+	return NewServer(Config{
+		JWTSecret:              "test-secret",
+		FrontendURL:            "http://frontend-test.com",
+		RateLimitMax:           100,
+		RateLimitWindowSeconds: 60,
+	}, matrixService)
 }
 
 func getTestToken(t *testing.T, app interface {

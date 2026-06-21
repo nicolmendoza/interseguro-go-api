@@ -18,7 +18,10 @@ func main() {
 	statsClient := statsclient.NewNodeStatsClient(cfg.NodeAPIURL)
 	matrixService := matrixapp.NewService(statsClient)
 	app := httptransport.NewServer(httptransport.Config{
-		JWTSecret: cfg.JWTSecret,
+		JWTSecret:              cfg.JWTSecret,
+		FrontendURL:            cfg.FrontendURL,
+		RateLimitMax:           cfg.RateLimitMax,
+		RateLimitWindowSeconds: cfg.RateLimitWindowSeconds,
 	}, matrixService)
 
 	log.Fatal(app.Listen(":" + cfg.Port))
