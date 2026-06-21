@@ -12,14 +12,17 @@ type Config struct {
 }
 
 func Load() (Config, error) {
+
 	port, err := requiredEnv("PORT")
 	if err != nil {
 		return Config{}, err
 	}
+
 	jwtSecret, err := requiredEnv("JWT_SECRET")
 	if err != nil {
 		return Config{}, err
 	}
+
 	nodeAPIURL, err := requiredEnv("NODE_API_URL")
 	if err != nil {
 		return Config{}, err
@@ -35,7 +38,7 @@ func Load() (Config, error) {
 func requiredEnv(key string) (string, error) {
 	value := os.Getenv(key)
 	if value == "" {
-		return "", fmt.Errorf("missing required environment variable: %s", key)
+		return "", fmt.Errorf("falta la variable de entorno requerida: %s", key)
 	}
 	return value, nil
 }

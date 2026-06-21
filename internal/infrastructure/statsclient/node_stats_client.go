@@ -1,4 +1,4 @@
-package infrastructure
+package statsclient
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"interseguro/go-api/internal/domain"
+	matrixdomain "interseguro/go-api/internal/domain/matrix"
 )
 
 type NodeStatsClient struct {
@@ -23,24 +23,29 @@ func NewNodeStatsClient(baseURL string) NodeStatsClient {
 	}
 }
 
-func (client NodeStatsClient) CalculateStats(matrices []domain.Matrix, bearerToken string) (json.RawMessage, int, error) {
-	payload, _ := json.Marshal(map[string][]domain.Matrix{"matrices": matrices})
+func (client NodeStatsClient) CalculateStats(matrices []matrixdomain.Matrix, bearerToken string) (json.RawMessage, int, error) {
+
+	payload, err := json.Marshal(map[string][]matrixdomain.Matrix{"matrices": matrices})
+	if err != nil {
+		return nil, http.StatusInternalServerError, errors.New("no se pudo preparar la solicitud para la API de Node")
+	}
+
 	req, err := http.NewRequest(http.MethodPost, client.baseURL+"/stats", bytes.NewReader(payload))
 	if err != nil {
 		return nil, http.StatusInternalServerError, err
 	}
+
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", bearerToken)
-
 	resp, err := client.client.Do(req)
 	if err != nil {
-		return nil, http.StatusBadGateway, errors.New("Node API is unavailable")
+		return nil, http.StatusBadGateway, errors.New("la API de Node no esta disponible")
 	}
-	defer resp.Body.Close()
 
+	defer resp.Body.Close()
 	var body json.RawMessage
 	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
-		return nil, http.StatusBadGateway, errors.New("invalid Node API response")
+		return nil, http.StatusBadGateway, errors.New("la API de Node devolvio una respuesta invalida")
 	}
 
 	return body, resp.StatusCode, nil

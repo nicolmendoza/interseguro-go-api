@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"interseguro/go-api/internal/application"
-	"interseguro/go-api/internal/config"
-	"interseguro/go-api/internal/infrastructure"
+	matrixapp "interseguro/go-api/internal/application/matrix"
+	"interseguro/go-api/internal/infrastructure/config"
+	"interseguro/go-api/internal/infrastructure/statsclient"
 	httptransport "interseguro/go-api/internal/transport/http"
 )
 
@@ -15,8 +15,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	statsClient := infrastructure.NewNodeStatsClient(cfg.NodeAPIURL)
-	matrixService := application.NewMatrixService(statsClient)
+	statsClient := statsclient.NewNodeStatsClient(cfg.NodeAPIURL)
+	matrixService := matrixapp.NewService(statsClient)
 	app := httptransport.NewServer(httptransport.Config{
 		JWTSecret: cfg.JWTSecret,
 	}, matrixService)

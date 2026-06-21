@@ -1,4 +1,4 @@
-package domain
+package matrix
 
 import (
 	"math"
@@ -6,15 +6,17 @@ import (
 )
 
 func TestQRFactorization(t *testing.T) {
-	matrix := Matrix{
+
+	input := Matrix{
 		{12, -51, 4},
 		{6, 167, -68},
 		{-4, 24, -41},
 	}
 
-	q, r, err := QRFactorization(matrix)
+	q, r, err := QRFactorization(input)
+
 	if err != nil {
-		t.Fatalf("expected QR factorization, got error: %v", err)
+		t.Fatalf("se esperaba la factorizacion QR, se obtuvo error: %v", err)
 	}
 
 	assertClose(t, q[0][0], 0.8571428571)
@@ -26,6 +28,7 @@ func TestQRFactorization(t *testing.T) {
 }
 
 func TestRotateClockwise(t *testing.T) {
+
 	got := RotateClockwise(Matrix{
 		{1, 2, 3},
 		{4, 5, 6},
@@ -40,7 +43,7 @@ func TestRotateClockwise(t *testing.T) {
 	for i := range want {
 		for j := range want[i] {
 			if got[i][j] != want[i][j] {
-				t.Fatalf("expected %v, got %v", want, got)
+				t.Fatalf("se esperaba %v, se obtuvo %v", want, got)
 			}
 		}
 	}
@@ -49,6 +52,6 @@ func TestRotateClockwise(t *testing.T) {
 func assertClose(t *testing.T, got float64, want float64) {
 	t.Helper()
 	if math.Abs(got-want) > 1e-8 {
-		t.Fatalf("expected %v, got %v", want, got)
+		t.Fatalf("se esperaba %v, se obtuvo %v", want, got)
 	}
 }

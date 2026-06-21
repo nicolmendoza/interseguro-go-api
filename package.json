@@ -1,0 +1,9 @@
+{
+  "name": "interseguro-go-api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "test": "go test ./..."
+  }
+}

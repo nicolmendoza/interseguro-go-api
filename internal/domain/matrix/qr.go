@@ -1,51 +1,12 @@
-package domain
+package matrix
 
 import (
 	"errors"
-	"fmt"
 	"math"
 )
 
-type Matrix [][]float64
-
-const epsilon = 1e-10
-
-func (matrix Matrix) ValidateForQR() error {
-	if err := matrix.ValidateRectangular(); err != nil {
-		return err
-	}
-
-	if len(matrix) < len(matrix[0]) {
-		return errors.New("QR factorization expects rows >= columns for this compact implementation")
-	}
-
-	return nil
-}
-
-func (matrix Matrix) ValidateRectangular() error {
-	if len(matrix) == 0 {
-		return errors.New("matrix must contain at least one row")
-	}
-	if len(matrix[0]) == 0 {
-		return errors.New("matrix must contain at least one column")
-	}
-
-	columns := len(matrix[0])
-	for i, row := range matrix {
-		if len(row) != columns {
-			return fmt.Errorf("matrix must be rectangular: row %d has a different length", i)
-		}
-		for _, value := range row {
-			if math.IsNaN(value) || math.IsInf(value, 0) {
-				return errors.New("matrix values must be finite numbers")
-			}
-		}
-	}
-
-	return nil
-}
-
 func QRFactorization(a Matrix) (Matrix, Matrix, error) {
+
 	if err := a.ValidateForQR(); err != nil {
 		return nil, nil, err
 	}
@@ -67,7 +28,7 @@ func QRFactorization(a Matrix) (Matrix, Matrix, error) {
 
 		norm := vectorNorm(v)
 		if norm < epsilon {
-			return nil, nil, errors.New("matrix columns must be linearly independent")
+			return nil, nil, errors.New("no se puede calcular QR porque las columnas de la matriz no son linealmente independientes")
 		}
 
 		r[j][j] = norm
@@ -79,21 +40,8 @@ func QRFactorization(a Matrix) (Matrix, Matrix, error) {
 	return q.rounded(), r.rounded(), nil
 }
 
-func RotateClockwise(matrix Matrix) Matrix {
-	rows := len(matrix)
-	columns := len(matrix[0])
-	rotated := zeroMatrix(columns, rows)
-
-	for row := 0; row < rows; row++ {
-		for col := 0; col < columns; col++ {
-			rotated[col][rows-1-row] = matrix[row][col]
-		}
-	}
-
-	return rotated
-}
-
 func zeroMatrix(rows int, columns int) Matrix {
+
 	matrix := make(Matrix, rows)
 	for i := range matrix {
 		matrix[i] = make([]float64, columns)
@@ -102,6 +50,7 @@ func zeroMatrix(rows int, columns int) Matrix {
 }
 
 func column(matrix Matrix, index int) []float64 {
+
 	values := make([]float64, len(matrix))
 	for i := range matrix {
 		values[i] = matrix[i][index]
@@ -110,6 +59,7 @@ func column(matrix Matrix, index int) []float64 {
 }
 
 func dot(a []float64, b []float64) float64 {
+
 	total := 0.0
 	for i := range a {
 		total += a[i] * b[i]
@@ -118,10 +68,12 @@ func dot(a []float64, b []float64) float64 {
 }
 
 func vectorNorm(values []float64) float64 {
+
 	return math.Sqrt(dot(values, values))
 }
 
 func (matrix Matrix) rounded() Matrix {
+
 	for i := range matrix {
 		for j := range matrix[i] {
 			matrix[i][j] = round(matrix[i][j])
@@ -131,6 +83,7 @@ func (matrix Matrix) rounded() Matrix {
 }
 
 func round(value float64) float64 {
+
 	if math.Abs(value) < epsilon {
 		return 0
 	}
