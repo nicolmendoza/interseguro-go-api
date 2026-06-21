@@ -7,32 +7,26 @@ Su responsabilidad es recibir una matriz, validar la entrada, calcular factoriza
 ## Requisitos
 
 - Go 1.22+
-- Node.js 20+, solo para usar `npm run dev` como helper local
+- Node.js 20+, solo si se desea ejecutar scripts auxiliares con npm
 - Docker
 
-La forma recomendada de levantar el proyecto es con Docker, porque el reto solicita contenerizar las aplicaciones y facilita ejecutar los tres servicios con configuracion consistente.
+La forma recomendada de levantar el proyecto es con Docker, porque el reto solicita contenerizar las aplicaciones y facilita ejecutar el servicio con configuracion consistente.
 
 ## Produccion
 
-Servicios desplegados en Google Cloud Run:
+Servicio desplegado en Google Cloud Run:
 
 ```txt
 Go API:   https://interseguro-go-api-745150536858.europe-west1.run.app
-Node API: https://interseguro-node-api-745150536858.europe-west1.run.app
-Swagger:  https://interseguro-node-api-745150536858.europe-west1.run.app/docs
-OpenAPI:  https://interseguro-node-api-745150536858.europe-west1.run.app/openapi.json
-Frontend: https://interseguro-technical-challenge-745150536858.europe-west1.run.app/
 ```
 
 ## Despliegue en Google Cloud
 
-Los tres servicios fueron desplegados en Google Cloud Run usando contenedores Docker:
+Este servicio fue desplegado en Google Cloud Run usando un contenedor Docker:
 
 - `interseguro-go-api`: API Go/Fiber para QR, rotacion y orquestacion.
-- `interseguro-node-api`: API Node/Express para estadisticas y documentacion Swagger/OpenAPI.
-- `interseguro-frontend`: aplicacion Next.js que consume ambas APIs.
 
-Cada servicio se construye como imagen Docker y se despliega de forma independiente en Cloud Run. El codigo fuente esta versionado en GitHub y Cloud Build queda conectado al repositorio correspondiente para compilar la imagen y publicar una nueva revision cuando se suben cambios.
+El servicio se construye como imagen Docker y se despliega de forma independiente en Cloud Run. El codigo fuente esta versionado en GitHub y Cloud Build queda conectado al repositorio para compilar la imagen y publicar una nueva revision cuando se suben cambios.
 
 Las variables de entorno se configuran desde Cloud Run, no quedan hardcodeadas en el codigo fuente. En produccion la API Go usa:
 
@@ -83,30 +77,7 @@ La API queda en:
 http://localhost:3000
 ```
 
-## Ejecutar en local sin Docker solo para desarrollo
-
-Primero levanta Node API.
-
-Luego:
-
-```bash
-go mod download
-go run .
-```
-
-O usando el helper:
-
-```bash
-npm run dev
-```
-
 ## Tests
-
-```bash
-go test ./...
-```
-
-O:
 
 ```bash
 npm test
