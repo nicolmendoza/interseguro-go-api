@@ -10,8 +10,6 @@ Su responsabilidad es recibir una matriz, validar la entrada, calcular factoriza
 - Node.js 20+, solo si se desea ejecutar scripts auxiliares con npm
 - Docker
 
-La forma recomendada de levantar el proyecto es con Docker, porque el reto solicita contenerizar las aplicaciones y facilita ejecutar el servicio con configuracion consistente.
-
 ## Produccion
 
 Servicio desplegado en Google Cloud Run:
@@ -35,7 +33,7 @@ JWT_SECRET=<configurado en Cloud Run>
 NODE_API_URL=https://interseguro-node-api-745150536858.europe-west1.run.app
 ```
 
-`PORT` no se define manualmente en Cloud Run porque la plataforma lo inyecta automaticamente en el contenedor.
+Cloud Run inyecta `PORT` automaticamente en el contenedor, por eso no se configura manualmente en produccion.
 
 ## Variables de entorno
 
